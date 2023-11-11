@@ -23,6 +23,19 @@
 				"inputs": [
 					{
 						"indexed": false,
+						"internalType": "string",
+						"name": "_campaignName",
+						"type": "string"
+					}
+				],
+				"name": "campaignFailedToReachTarget",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
 						"internalType": "address",
 						"name": "_donatorAddress",
 						"type": "address"
@@ -115,7 +128,7 @@
 						"type": "string"
 					},
 					{
-						"internalType": "address payable",
+						"internalType": "address",
 						"name": "donationReceiver",
 						"type": "address"
 					},
@@ -138,6 +151,11 @@
 						"internalType": "uint256",
 						"name": "deadline",
 						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "isFailed",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -192,7 +210,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "releaseFundToDonators",
+				"name": "releaseFundToReceiver",
 				"outputs": [],
 				"stateMutability": "payable",
 				"type": "function"
@@ -205,7 +223,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "releaseFundToReceiver",
+				"name": "withdrawHeldFund",
 				"outputs": [],
 				"stateMutability": "payable",
 				"type": "function"
@@ -239,11 +257,11 @@
 	},
 	"sources": {
 		"contracts/crowdfunding.sol": {
-			"keccak256": "0x2bd6124bbc83b4da5569b98a3d5858bc6c9aac0acd00ef570d1b1b79faa48a8a",
+			"keccak256": "0x41658529679c6eb4fa967c9f9f074fc327b95cde99241d47b49574d177cb78b1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://eaf8c87e533043a869ae773f3438077a3809542ed2c8bb9ecb8280be72a34048",
-				"dweb:/ipfs/QmWa7QTfDzezbqPgbSRSL8BhfKQjBFL23cGeCEYgBExN9m"
+				"bzz-raw://8327ce94a5760495423c16954a9e13779ffa615c892145e145d485b5bdd14a0e",
+				"dweb:/ipfs/QmcUp6cwTzkLUQeSwqkkaQ9XEGSi6ofF7n4EcscMZDFZNt"
 			]
 		}
 	},
