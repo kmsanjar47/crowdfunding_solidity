@@ -49,7 +49,7 @@ contract CrowdFunding {
     }
     modifier deadlineReached(uint256 _campaignNo) {
         require(
-            campaigns[_campaignNo].deadline < block.timestamp,
+            campaigns[_campaignNo].deadline > block.timestamp,
             "Campaign reached the deadline. You can't do any transaction anymore"
         );
         _;
@@ -78,6 +78,11 @@ contract CrowdFunding {
         _;
     }
 
+    modifier minTransactionAmount() {
+        require(msg.value >= 1, "Minimun transaction amount is 1 Wei");
+        _;
+    }
+
     //Functions
 
     //Helper Functions
@@ -87,7 +92,7 @@ contract CrowdFunding {
         view
         returns (uint256 _index)
     {
-        for (uint256 i = 0; i < campaignNo; i++) {
+        for (uint256 i = 0; i <= campaignNo; i++) {
             if (
                 keccak256(abi.encodePacked(campaigns[i].campaignName)) ==
                 keccak256(abi.encodePacked(_campaignName))
@@ -151,6 +156,7 @@ contract CrowdFunding {
         deadlineReached(fetchCampaignIndex(_campaignName))
         campaignIsActive(fetchCampaignIndex(_campaignName))
         campaignExists(_campaignName)
+        minTransactionAmount()
     {
         uint256 i = fetchCampaignIndex(_campaignName);
 
@@ -163,6 +169,7 @@ contract CrowdFunding {
     }
 
     function checkCampaignState(uint256 _campaignNo) private {
+
         if (isTargetReached(_campaignNo)) {
             campaigns[_campaignNo].isOpen = false;
             emit targetReached(
@@ -171,11 +178,14 @@ contract CrowdFunding {
                 campaigns[_campaignNo].totalBalance
             );
             releaseFundToReceiver(_campaignNo);
+            
         } else if (isDeadlineReached(_campaignNo)) {
             campaigns[_campaignNo].isOpen = false;
             campaigns[_campaignNo].isFailed = true;
             emit campaignDeadlineReached(campaigns[_campaignNo].campaignName);
-            emit campaignFailedToReachTarget(campaigns[_campaignNo].campaignName);
+            emit campaignFailedToReachTarget(
+                campaigns[_campaignNo].campaignName
+            );
         }
     }
 
@@ -188,7 +198,6 @@ contract CrowdFunding {
         emit fundSentToReceiver(receiverAddress, totalBalance);
     }
 
-
     function withdrawHeldFund(uint256 _campaignNo)
         public
         payable
@@ -196,7 +205,6 @@ contract CrowdFunding {
         campaignFailed(_campaignNo)
         checkDonatorValidity(_campaignNo)
     {
-
         address payable donatorAddress = payable(msg.sender);
         uint256 donatedAmount = campaigns[_campaignNo].donators[msg.sender];
         donatorAddress.transfer(donatedAmount);
